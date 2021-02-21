@@ -1,5 +1,6 @@
 package FYP;
 import robocode.*;
+import robocode.util.*;
 import java.awt.Color;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
@@ -29,26 +30,36 @@ public class FYPBot extends Robot
 		while(true) {
 			ahead(100);
 			turnGunRight(360);
-			back(75);
-			turnGunRight(360);
+			scan();
 		}
+	}
+	/**
+	 * normlaise the angle to a relative angle between 179 and -180 
+	 */
+	public double normaliseAngle(double angle){
+		return(angle%=360)>=0?(angle<180)?angle:angle-360:(angle>= -180)?angle:angle+360;
 	}
 
 	/**
 	 * onScannedRobot: if it has the energy it will attmpt to engage else it will flee
+	 * when it engages it will lock on to the opponat 
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energy=getEnergy();
 		double bearing=e.getBearing();
+		double absBearing=getHeading()+bearing;
+		double gunBearing=normaliseAngle(absBearing-getGunHeading());
 		
+		turnGunRight(gunBearing);
 		if(energy<50){
-			back(100);
 			fire(1);
+			back(100);
 		}
 		else{
 			fire(2);
 			ahead(100);
 		}
+		scan();
 	}
 
 	/**
@@ -62,7 +73,7 @@ public class FYPBot extends Robot
 			ahead(100);
 		}
 		else{
-			turnRight(360);
+			turnGunRight(360);
 			ahead(100);
 		}
 	}
@@ -75,4 +86,9 @@ public class FYPBot extends Robot
 			turnRight(-bearing);
 			ahead(100);
 	}	
+	 public void onWin(WinEvent e){
+		turnRight(180);
+		turnRight(-180);
+		turnRight(360);
+	 }
 }
