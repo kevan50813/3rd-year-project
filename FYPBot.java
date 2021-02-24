@@ -2,6 +2,7 @@ package FYP;
 import robocode.*;
 import robocode.util.*;
 import java.awt.Color;
+import static robocode.util.Utils.normalRelativeAngleDegrees;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
 
@@ -20,8 +21,8 @@ public class FYPBot extends Robot
 		// and the next line:
 
 		//setColors
-		setBodyColor(new Color(5, 165, 240));
-		setGunColor(new Color(0, 150, 50));
+		setBodyColor(new Color(82,12,122));
+		setGunColor(new Color(82, 12, 122));
 		setRadarColor(new Color(0, 100, 100));
 		setBulletColor(new Color(255, 251, 5));
 		setScanColor(new Color(158,21,21));
@@ -29,16 +30,29 @@ public class FYPBot extends Robot
 		// Robot main loop
 		while(true) {
 			ahead(100);
+			turnRight(45);
+			ahead(100);
+			turnRight(-45);
 			turnGunRight(360);
 			scan();
 		}
 	}
+	
 	/**
-	 * normlaise the angle to a relative angle between 179 and -180 
+	 * Ram the opponat if it is close enough else just return
+	 * not 100% accurate but will work sometimes
 	 */
-	public double normaliseAngle(double angle){
-		return(angle%=360)>=0?(angle<180)?angle:angle-360:(angle>= -180)?angle:angle+360;
-	}
+	public void ram(ScannedRobotEvent e){
+	double bearing=e.getBearing();
+	double absBearing=getHeading()+bearing;
+	double gunBearing=normalRelativeAngleDegrees(absBearing - getGunHeading());
+		if(e.getDistance()<=20){
+			turnRight(absBearing);
+			ahead(100);
+			fire(1);
+		}
+	}	
+	
 
 	/**
 	 * onScannedRobot: if it has the energy it will attmpt to engage else it will flee
@@ -48,18 +62,23 @@ public class FYPBot extends Robot
 		double energy=getEnergy();
 		double bearing=e.getBearing();
 		double absBearing=getHeading()+bearing;
-		double gunBearing=normaliseAngle(absBearing-getGunHeading());
+		double gunBearing=normalRelativeAngleDegrees(absBearing - getGunHeading());
 		
 		turnGunRight(gunBearing);
-		if(energy<50){
+		if(energy<40){
 			fire(1);
-			back(100);
+			ahead(300);
+		}
+		else if(energy>100){
+			fire(5);
+			ahead(100);
+			ram(e);
 		}
 		else{
-			fire(2);
-			ahead(100);
+			fire(3);
+			ahead(200);
+			ram(e);
 		}
-		scan();
 	}
 
 	/**
@@ -73,7 +92,7 @@ public class FYPBot extends Robot
 			ahead(100);
 		}
 		else{
-			turnGunRight(360);
+			turnGunRight(bearing);
 			ahead(100);
 		}
 	}
@@ -86,6 +105,10 @@ public class FYPBot extends Robot
 			turnRight(-bearing);
 			ahead(100);
 	}	
+	
+	/**
+	 * OnWin: do a vicoty dance
+	 */
 	 public void onWin(WinEvent e){
 		turnRight(180);
 		turnRight(-180);
