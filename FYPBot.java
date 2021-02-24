@@ -2,7 +2,7 @@ package FYP;
 import robocode.*;
 import robocode.util.*;
 import java.awt.Color;
-import static robocode.util.Utils.normalRelativeAngleDegrees;
+import robocode.util.Utils;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
 
@@ -45,7 +45,6 @@ public class FYPBot extends Robot
 	public void ram(ScannedRobotEvent e){
 	double bearing=e.getBearing();
 	double absBearing=getHeading()+bearing;
-	double gunBearing=normalRelativeAngleDegrees(absBearing - getGunHeading());
 		if(e.getDistance()<=20){
 			turnRight(absBearing);
 			ahead(100);
@@ -62,7 +61,7 @@ public class FYPBot extends Robot
 		double energy=getEnergy();
 		double bearing=e.getBearing();
 		double absBearing=getHeading()+bearing;
-		double gunBearing=normalRelativeAngleDegrees(absBearing - getGunHeading());
+		double gunBearing=Utils.normalRelativeAngleDegrees(absBearing - getGunHeading());
 		
 		turnGunRight(gunBearing);
 		if(energy<40){
