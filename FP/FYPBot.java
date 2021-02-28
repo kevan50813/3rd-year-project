@@ -9,14 +9,13 @@ import robocode.util.Utils;
 /**
  * FYPBot - a robot by Kevan Jordan
  */
-public class FYPBot extends Robot
-{
+public class FYPBot extends AdvancedRobot{
+	// Initialization of the robot should be put here
+	State s = State.SEARCH;
 	/**
 	 * run: FYPBot's default behavior.
 	 */
 	public void run() {
-		// Initialization of the robot should be put here
-
 		// After trying out your robot, try uncommenting the import at the top,
 		// and the next line:
 
@@ -29,12 +28,22 @@ public class FYPBot extends Robot
 
 		// Robot main loop
 		while(true) {
-			ahead(100);
-			turnRight(45);
-			ahead(100);
-			turnRight(-45);
-			turnGunRight(360);
-			scan();
+			switch (s){
+				case SEARCH:
+					ahead(100);
+					turnRight(45);
+					ahead(100);
+					turnRight(-45);
+					turnGunRight(360);
+					scan();
+					break;
+				case DEFEND:
+					turnGunRight(360);
+					break;
+				case ATTACK:
+					turnGunRight(360);
+					break;
+			}
 		}
 	}
 	
@@ -59,14 +68,11 @@ public class FYPBot extends Robot
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energy=getEnergy();
-		double bearing=e.getBearing();
-		double absBearing=getHeading()+bearing;
-		double gunBearing=Utils.normalRelativeAngleDegrees(absBearing - getGunHeading());
-		
-		turnGunRight(gunBearing);
-		if(energy<40){
+		double absBearing=e.getHeadingRadians()+e.getBearingRadians();
+		setTurnGunRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing - getGunHeadingRadians()));
+		if(energy<30){
 			fire(1);
-			ahead(300);
+			ahead(100);
 		}
 		else if(energy>100){
 			fire(5);
@@ -75,10 +81,9 @@ public class FYPBot extends Robot
 		}
 		else{
 			fire(3);
-			ahead(200);
+			ahead(100);
 			ram(e);
 		}
-		turnGunRight(360);
 	}
 
 	/**
@@ -95,7 +100,6 @@ public class FYPBot extends Robot
 			turnGunRight(bearing);
 			ahead(100);
 		}
-		turnGunRight(360);
 	}
 	
 	/**
@@ -105,7 +109,6 @@ public class FYPBot extends Robot
 			double bearing=e.getBearing();
 			turnRight(-bearing);
 			ahead(100);
-			turnGunRight(360);
 	}	
 	
 	/**

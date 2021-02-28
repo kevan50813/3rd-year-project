@@ -1,8 +1,14 @@
 package FP;
 
 public class FiniteStateController {
-    State currnetState;
-    public void setState(State s){
-        currnetState=s;
+    private  State state;
+
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }
