@@ -11,7 +11,8 @@ import robocode.util.Utils;
  */
 public class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
-	State s = State.SEARCH;
+	FiniteStateController fsc=new FiniteStateController();
+
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -19,29 +20,32 @@ public class FYPBot extends AdvancedRobot{
 		// After trying out your robot, try uncommenting the import at the top,
 		// and the next line:
 
+		setAdjustRadarForRobotTurn(true);
+		setAdjustGunForRobotTurn(true);;
 		//setColors
 		setBodyColor(new Color(82,12,122));
 		setGunColor(new Color(82, 12, 122));
 		setRadarColor(new Color(0, 5, 57));
 		setBulletColor(new Color(255, 251, 5));
 		setScanColor(new Color(158,21,21));
-
+		turnRadarRightRadians(Double.POSITIVE_INFINITY);
+		fsc.setState(State.SEARCH);
 		// Robot main loop
 		while(true) {
-			switch (s){
+			scan();
+			switch (fsc.getState()){
 				case SEARCH:
 					ahead(100);
 					turnRight(45);
 					ahead(100);
 					turnRight(-45);
-					turnGunRight(360);
-					scan();
 					break;
 				case DEFEND:
 					turnGunRight(360);
 					break;
 				case ATTACK:
-					turnGunRight(360);
+					ahead(100);
+					fire(0.5);
 					break;
 			}
 		}
@@ -51,13 +55,10 @@ public class FYPBot extends AdvancedRobot{
 	 * Ram the opponat if it is close enough else just return
 	 * not 100% accurate but will work sometimes
 	 */
-	public void ram(ScannedRobotEvent e){
-	double bearing=e.getBearing();
-	double absBearing=getHeading()+bearing;
+	public void ram(ScannedRobotEvent e){ ;
 		if(e.getDistance()<=20){
-			turnRight(absBearing);
 			ahead(100);
-			fire(1);
+			fire(3);
 		}
 	}	
 	
@@ -68,20 +69,27 @@ public class FYPBot extends AdvancedRobot{
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energy=getEnergy();
-		double absBearing=e.getHeadingRadians()+e.getBearingRadians();
-		setTurnGunRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing - getGunHeadingRadians()));
-		if(energy<30){
-			fire(1);
-			ahead(100);
-		}
-		else if(energy>100){
-			fire(5);
-			ahead(100);
-			ram(e);
+		double absBearing=e.getBearingRadians()+getHeadingRadians();
+		double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
+		double gunTurnAmt;
+		setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
+		//this an implention of the 'SuperTracker' form the robocode wiki
+		if (e.getDistance() >=40) {
+			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
+			setTurnGunRightRadians(gunTurnAmt);
+			setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
+			if(energy>=30){
+				setAhead((e.getDistance() - 140));
+				setFire(1);
+				fsc.setState(State.ATTACK);
+			}
+			else{
+				setBack((e.getDistance() - 140));
+				setFire(0.1);
+				fsc.setState(State.DEFEND);
+			}
 		}
 		else{
-			fire(3);
-			ahead(100);
 			ram(e);
 		}
 	}
