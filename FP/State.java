@@ -3,5 +3,6 @@ package FP;
 public enum State {
     SEARCH,
     ATTACK,
-    DEFEND
+    DEFEND,
+    RAM
 }

@@ -1,8 +1,9 @@
 package FP;
 
 public class FiniteStateController {
-    private  State state;
+    
 
+    private  State state;
 
     public State getState() {
         return state;
@@ -11,4 +12,5 @@ public class FiniteStateController {
     public void setState(State state) {
         this.state = state;
     }
+
 }
