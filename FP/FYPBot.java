@@ -22,7 +22,7 @@ public class FYPBot extends AdvancedRobot{
 
 		// when the robot is turning disable the radar and gun truing to prevent an accrucy loss
 		setAdjustRadarForRobotTurn(true);
-		setAdjustGunForRobotTurn(true);;
+		setAdjustGunForRobotTurn(true);
 		//setColors
 		setBodyColor(new Color(82,12,122));
 		setGunColor(new Color(82, 12, 122));
