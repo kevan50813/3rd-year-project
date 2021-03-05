@@ -93,8 +93,14 @@ public class FYPBot extends AdvancedRobot{
 		setTurnRightRadians(Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
 		if(energy>=30){
 			setAhead((e.getDistance() - 140));
-			setFire(1);
-			fsc.setState(State.ATTACK);
+			if(e.getDistance()<20){
+				setFire(1);
+				fsc.setState(State.ATTACK);
+			}
+			else{
+				setFire(2.5);
+				fsc.setState(State.ATTACK);
+			}
 		}
 		else{
 			setBack((e.getDistance() - 140));
