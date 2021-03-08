@@ -2,6 +2,7 @@ package FP;
 
 public class FiniteStateController {
 
+
     private  State state;
 
     public State getState() {
@@ -11,6 +12,7 @@ public class FiniteStateController {
     public void setState(State state) {
         this.state = state;
     }
+
 
 
 }

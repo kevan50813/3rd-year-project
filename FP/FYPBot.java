@@ -1,8 +1,9 @@
 package FP;
 import robocode.*;
-import robocode.util.*;
 import java.awt.Color;
 import robocode.util.Utils;
+
+import static robocode.util.Utils.normalRelativeAngleDegrees;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
 
@@ -12,7 +13,6 @@ import robocode.util.Utils;
 public class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
 	FiniteStateController fsc=new FiniteStateController();
-
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -34,33 +34,52 @@ public class FYPBot extends AdvancedRobot{
 		// Robot main loop
 		while(true) {
 			scan();
-			//use the Finite ste contoler to get the currnat state , whitch will be siwtched as the robot perfomes cations such as OnScan
-			switch (fsc.getState()){
-				case SEARCH:
-					ahead(100);
-					turnRight(45);
-					ahead(100);
-					turnRight(-45);
-					break;
-				case DEFEND:
-					back(100);
-					turnRight(90);
-					back(100);
-					break;
-				case ATTACK:
-					ahead(100);
-					fire(0.5);
-					break;
-				case RAM:
-					ahead(10);
-					fire(3);
-					turnRight(180);
-					break;
-			}
+			selectSate();
 		}
 	}
 
-	
+	//use the Finite ste contoler to get the currnat state , whitch will be siwtched as the robot perfomes cations such as OnScan
+	private void selectSate() {
+		fsc.setState(State.DEFEND);
+		switch (fsc.getState()){
+			case SEARCH:
+				search();
+				break;
+			case DEFEND:
+				defend();
+				break;
+			case ATTACK:
+				attack(100, 0.5);
+				break;
+			case RAM:
+				ram();
+				break;
+		}
+	}
+
+	//functions for each of the states this will control the states behavoiure
+	private void ram() {
+		attack(10, 3);
+		turnRight(180);
+	}
+
+	private void attack(int i, double v) {
+		ahead(i);
+		fire(v);
+	}
+
+	private void defend() {
+		turnRight(normalRelativeAngleDegrees(1- getHeading()));
+		back(1000);
+	}
+
+	private void search() {
+		ahead(100);
+		turnRight(45);
+		ahead(100);
+		turnRight(-45);
+	}
+
 
 	/**
 	 * onScannedRobot: if it has the energy it will attmpt to engage else it will flee
@@ -72,7 +91,7 @@ public class FYPBot extends AdvancedRobot{
 		double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
 		double gunTurnAmt;
 		setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
-		//this an implention of the 'SuperTracker' form the robocode wiki
+		//this an implantation of the 'SuperTracker' form the robocode wiki
 		if (e.getDistance() >=100) {
 			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
 			turnRadar(e, energy, absBearing, velocity, gunTurnAmt);
@@ -130,9 +149,14 @@ public class FYPBot extends AdvancedRobot{
 	 * onHitWall:turn away form the wall then move away form it
 	 */
 	public void onHitWall(HitWallEvent e) {
-			double bearing=e.getBearing();
-			turnRight(-bearing);
-			ahead(100);
+			if(fsc.getState()==State.DEFEND){
+				turnRight(90);
+			}
+			else{
+				double bearing=e.getBearing();
+				turnRight(-bearing);
+			}
+		ahead(100);
 	}	
 	
 	/**
