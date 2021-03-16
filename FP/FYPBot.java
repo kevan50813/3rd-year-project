@@ -3,8 +3,6 @@ import robocode.*;
 import java.awt.Color;
 import robocode.util.Utils;
 
-import static robocode.util.Utils.normalRelativeAngleDegrees;
-
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
 
 /**
@@ -12,7 +10,7 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
  */
 public abstract class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
-	sateController fsc=new sateController();
+	sateController sc =new sateController();
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -30,10 +28,11 @@ public abstract class FYPBot extends AdvancedRobot{
 		setBulletColor(new Color(255, 251, 5));
 		setScanColor(new Color(158,21,21));
 		turnRadarRightRadians(Double.POSITIVE_INFINITY);
-		fsc.setState(State.SEARCH);
+		sc.setState(State.SEARCH);
 		// Robot main loop
 		while(true) {
 			scan();
+			System.out.println("i am in Sate "+ sc.getState());
 			selectSate();
 		}
 	}
@@ -76,7 +75,7 @@ public abstract class FYPBot extends AdvancedRobot{
 		}
 		else{
 			if(energy>=50){
-				fsc.setState(State.RAM);
+				sc.setState(State.RAM);
 			}
 		}
 	}
@@ -88,17 +87,16 @@ public abstract class FYPBot extends AdvancedRobot{
 			setAhead((e.getDistance() - 140));
 			if(e.getDistance()<20){
 				setFire(1);
-				fsc.setState(State.ATTACK);
 			}
 			else{
 				setFire(2.5);
-				fsc.setState(State.ATTACK);
 			}
+			sc.setState(State.ATTACK);
 		}
 		else{
 			setBack((e.getDistance() - 140));
 			setFire(0.1);
-			fsc.setState(State.DEFEND);
+			sc.setState(State.DEFEND);
 		}
 	}
 
@@ -111,7 +109,7 @@ public abstract class FYPBot extends AdvancedRobot{
 		if(energy<50){
 			turnRight(-bearing);
 			ahead(100);
-			fsc.setState(State.DEFEND);
+			sc.setState(State.DEFEND);
 		}
 		else{
 			turnGunRight(bearing);
@@ -123,12 +121,11 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * onHitWall:turn away form the wall then move away form it
 	 */
 	public void onHitWall(HitWallEvent e) {
-			if(fsc.getState()==State.DEFEND){
+			if(sc.getState()==State.DEFEND){
 				turnRight(90);
 			}
 			else{
-				double bearing=e.getBearing();
-				turnRight(-bearing);
+				turnRight(-e.getBearing());
 			}
 		ahead(100);
 	}	

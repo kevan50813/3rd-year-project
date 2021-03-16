@@ -6,22 +6,19 @@ public class FiniteStateController extends FYPBot{
 
     @Override
     protected void selectSate() {
-        fsc.setState(State.DEFEND);
-        switch (fsc.getState()){
+        System.out.println("i am in Sate "+ sc.getState());
+        switch (sc.getState()){
             case SEARCH:
-                System.out.println("SEARCH");
                 search();
                 break;
             case DEFEND:
-                System.out.println("DEFEND");
                 defend();
                 break;
             case ATTACK:
-                System.out.println("ATTACK");
                 attack(100, 0.5);
                 break;
             case RAM:
-                System.out.println("RAM");
+
                 ram();
                 break;
         }
@@ -30,7 +27,6 @@ public class FiniteStateController extends FYPBot{
     @Override
     protected void ram() {
         attack(10, 3);
-        turnRight(180);
     }
 
     @Override
