@@ -10,9 +10,9 @@ import static robocode.util.Utils.normalRelativeAngleDegrees;
 /**
  * FYPBot - a robot by Kevan Jordan
  */
-public class FYPBot extends AdvancedRobot{
+public abstract class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
-	FiniteStateController fsc=new FiniteStateController();
+	sateController fsc=new sateController();
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -38,47 +38,21 @@ public class FYPBot extends AdvancedRobot{
 		}
 	}
 
+
+
+
+
 	//use the Finite ste contoler to get the currnat state , whitch will be siwtched as the robot perfomes cations such as OnScan
-	private void selectSate() {
-		fsc.setState(State.DEFEND);
-		switch (fsc.getState()){
-			case SEARCH:
-				search();
-				break;
-			case DEFEND:
-				defend();
-				break;
-			case ATTACK:
-				attack(100, 0.5);
-				break;
-			case RAM:
-				ram();
-				break;
-		}
-	}
+	protected abstract void selectSate();
 
 	//functions for each of the states this will control the states behavoiure
-	private void ram() {
-		attack(10, 3);
-		turnRight(180);
-	}
+	protected abstract void ram();
 
-	private void attack(int i, double v) {
-		ahead(i);
-		fire(v);
-	}
+	protected abstract void attack(int i, double v);
 
-	private void defend() {
-		turnRight(normalRelativeAngleDegrees(1- getHeading()));
-		back(1000);
-	}
+	protected abstract void defend();
 
-	private void search() {
-		ahead(100);
-		turnRight(45);
-		ahead(100);
-		turnRight(-45);
-	}
+	protected abstract void search();
 
 
 	/**
@@ -167,4 +141,5 @@ public class FYPBot extends AdvancedRobot{
 		turnRight(-180);
 		turnRight(360);
 	 }
+
 }
