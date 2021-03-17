@@ -31,25 +31,17 @@ public abstract class FYPBot extends AdvancedRobot{
 		sc.setState(State.SEARCH);
 		// Robot main loop
 		while(true) {
-			scan();
-			System.out.println("i am in Sate "+ sc.getState());
-			selectSate();
+			search();
 		}
 	}
 
 
-
-
-
-	//use the Finite ste contoler to get the currnat state , whitch will be siwtched as the robot perfomes cations such as OnScan
-	protected abstract void selectSate();
-
 	//functions for each of the states this will control the states behavoiure
 	protected abstract void ram();
 
-	protected abstract void attack(int i, double v);
+	protected abstract void attack(ScannedRobotEvent e);
 
-	protected abstract void defend();
+	protected abstract void defend(ScannedRobotEvent e);
 
 	protected abstract void search();
 
@@ -59,45 +51,40 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * when it engages it will lock on to the opponat 
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-		double energy=getEnergy();
-		double absBearing=e.getBearingRadians()+getHeadingRadians();
-		double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
-		double gunTurnAmt;
-		setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
-		//this an implantation of the 'SuperTracker' form the robocode wiki
-		if (e.getDistance() >=100) {
-			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
-			turnRadar(e, energy, absBearing, velocity, gunTurnAmt);
-		}
-		if(e.getDistance()>=50&&e.getDistance()<100){
-			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/100);
-			turnRadar(e, energy, absBearing, velocity, gunTurnAmt);
-		}
-		else{
-			if(energy>=50){
-				sc.setState(State.RAM);
-			}
-		}
+		sc.setState(State.ATTACK);
+	    attack(e);
 	}
 
-	private void turnRadar(ScannedRobotEvent e, double energy, double absBearing, double velocity, double gunTurnAmt) {
-		setTurnGunRightRadians(gunTurnAmt);
-		setTurnRightRadians(Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
-		if(energy>=30){
-			setAhead((e.getDistance() - 140));
-			if(e.getDistance()<20){
-				setFire(1);
-			}
-			else{
-				setFire(2.5);
-			}
-			sc.setState(State.ATTACK);
+	/**
+	 * this mthod turns the radar towards the opponent and fires with varing power bsed on the ditscance form its opponrnt
+	 * @param e
+	 * @param energy
+	 * @param absBearing
+	 * @param velocity
+	 * @param gunTurnAmt
+	 */
+	protected  void turnRadar(ScannedRobotEvent e, double energy, double absBearing, double velocity, double gunTurnAmt) {
+
+		if (e.getDistance() >150) {
+			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/22);//amount to turn our gun, lead just a little bit
+			setTurnGunRightRadians(gunTurnAmt); //turn our gun
+			setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));//drive towards the enemies predicted future location
+			setFire(3);//fire
+		}
+		if(e.getDistance()>50 && e.getDistance()<150){
+			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);//amount to turn our gun, lead just a little bit
+			setTurnGunRightRadians(gunTurnAmt);//turn our gun
+			setTurnLeft(-90-e.getBearing()); //turn perpendicular to the enemy
+			setFire(1.5);
 		}
 		else{
-			setBack((e.getDistance() - 140));
-			setFire(0.1);
-			sc.setState(State.DEFEND);
+			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);//amount to turn our gun, lead just a little bit
+			setTurnGunRightRadians(gunTurnAmt);//turn our gun
+			setTurnLeft(-90-e.getBearing()); //turn perpendicular to the enemy
+			ram();
 		}
+		setAhead((e.getDistance() - 140));//move forward
+
 	}
 
 	/**
