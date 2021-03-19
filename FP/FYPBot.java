@@ -9,7 +9,6 @@ import java.awt.Color;
  */
 public abstract class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
-	protected int moveDirection=1;
 	private double gunTurnAmt;
 	sateController sc =new sateController();
 	/**
@@ -41,7 +40,7 @@ public abstract class FYPBot extends AdvancedRobot{
 
 	protected abstract void attack(ScannedRobotEvent e);
 
-	protected abstract void defend(HitByBulletEvent e);
+	protected abstract void defend();
 
 	protected abstract void search();
 
@@ -51,7 +50,12 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * when it engages it will lock on to the opponat 
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-	    attack(e);
+	    if(e.getEnergy()>=5){
+			attack(e);
+		}
+		else{
+			defend();
+		}
 	}
 
 	/**
@@ -72,7 +76,7 @@ public abstract class FYPBot extends AdvancedRobot{
 			setTurnLeft(-90-e.getBearing()); //turn perpendicular to the enemy
 			setFire(1.5);
 		}
-		setAhead((e.getDistance() - 140)*moveDirection);//move forward
+		setAhead((e.getDistance() - 140));//move forward
 
 	}
 
@@ -84,13 +88,11 @@ public abstract class FYPBot extends AdvancedRobot{
 		double bearing=e.getBearing();
 		if(energy<50){
 			turnRight(-bearing);
-			ahead(100);
-			defend(e);
 		}
 		else{
 			turnGunRight(bearing);
-			ahead(100);
 		}
+		ahead(100);
 	}
 	
 	/**

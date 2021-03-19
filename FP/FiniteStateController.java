@@ -1,6 +1,5 @@
 package FP;
 
-import robocode.HitByBulletEvent;
 import robocode.ScannedRobotEvent;
 
 public class FiniteStateController extends FYPBot{
@@ -35,7 +34,7 @@ public class FiniteStateController extends FYPBot{
     }
 
     @Override
-    protected void defend(HitByBulletEvent e) {
+    protected void defend() {
         sc.setState(State.DEFEND);
         System.out.println("i am in Sate "+ sc.getState());
         setBack(100);
@@ -46,6 +45,7 @@ public class FiniteStateController extends FYPBot{
     protected void search() {
         sc.setState(State.SEARCH);
         System.out.println("i am in Sate "+ sc.getState());
+        setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
         ahead(100);
         turnRight(45);
         ahead(100);
