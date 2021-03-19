@@ -4,6 +4,7 @@ import robocode.ScannedRobotEvent;
 
 public class FiniteStateController extends FYPBot{
 
+    private double gunTurnAmt;
 
     @Override
     protected void ram(ScannedRobotEvent e) {
@@ -27,7 +28,7 @@ public class FiniteStateController extends FYPBot{
             setMaxVelocity((12*Math.random())+12);//randomly change speed
         }
         //lock on to its target
-        super.turnRadar(e,absBearing,velocity);
+        turnRadar(e,absBearing,velocity);
         if(e.getDistance()<15 && energy >20){
             ram(e);
         }
@@ -50,5 +51,26 @@ public class FiniteStateController extends FYPBot{
         turnRight(45);
         ahead(100);
         turnRight(-45);
+    }
+
+    /**
+     * this mthod turns the radar towards the opponent and fires with varing power bsed on the ditscance form its opponrnt
+     */
+    private void turnRadar(ScannedRobotEvent e, double absBearing, double velocity) {
+
+        if (e.getDistance() >150) {
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/22);//amount to turn our gun, lead just a little bit
+            setTurnGunRightRadians(gunTurnAmt); //turn our gun
+            setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));//drive towards the enemies predicted future location
+            setFire(3);//fire
+        }
+        else{
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/15);//amount to turn our gun, lead just a little bit
+            setTurnGunRightRadians(gunTurnAmt);//turn our gun
+            setTurnLeft(-90-e.getBearing()); //turn perpendicular to the enemy
+            setFire(1.5);
+        }
+        setAhead((e.getDistance() - 140));//move forward
+
     }
 }

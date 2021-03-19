@@ -9,7 +9,6 @@ import java.awt.Color;
  */
 public abstract class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
-	private double gunTurnAmt;
 	sateController sc =new sateController();
 	/**
 	 * run: FYPBot's default behavior.
@@ -58,27 +57,6 @@ public abstract class FYPBot extends AdvancedRobot{
 		}
 	}
 
-	/**
-	 * this mthod turns the radar towards the opponent and fires with varing power bsed on the ditscance form its opponrnt
-	 */
-	protected  void turnRadar(ScannedRobotEvent e, double absBearing, double velocity) {
-
-		//move forward
-		if (e.getDistance() >150) {
-			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/22);//amount to turn our gun, lead just a little bit
-			setTurnGunRightRadians(gunTurnAmt); //turn our gun
-			setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));//drive towards the enemies predicted future location
-			setFire(3);//fire
-		}
-		else{
-			gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/15);//amount to turn our gun, lead just a little bit
-			setTurnGunRightRadians(gunTurnAmt);//turn our gun
-			setTurnLeft(-90-e.getBearing()); //turn perpendicular to the enemy
-			setFire(1.5);
-		}
-		setAhead((e.getDistance() - 140));//move forward
-
-	}
 
 	/**
 	 * onHitByBullet: if it has the energy it will turn to face off agist its enmy else it will flee
