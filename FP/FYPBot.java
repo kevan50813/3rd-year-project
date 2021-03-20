@@ -10,6 +10,7 @@ import java.awt.Color;
 public abstract class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
 	sateController sc =new sateController();
+	protected int moveDirection=1;
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -35,7 +36,7 @@ public abstract class FYPBot extends AdvancedRobot{
 
 
 	//functions for each of the states this will control the states behavoiure
-	protected abstract void ram(ScannedRobotEvent e);
+	protected abstract void ram();
 
 	protected abstract void attack(ScannedRobotEvent e);
 
@@ -49,7 +50,9 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * when it engages it will lock on to the opponat 
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
-	    if(e.getEnergy()>=5){
+		double energy=getEnergy();
+
+	    if(energy>=20){
 			attack(e);
 		}
 		else{
@@ -81,9 +84,8 @@ public abstract class FYPBot extends AdvancedRobot{
 				turnRight(90);
 			}
 			else{
-				turnRight(-e.getBearing());
+				moveDirection= -moveDirection;
 			}
-		ahead(100);
 	}	
 	
 	/**
