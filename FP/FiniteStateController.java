@@ -4,10 +4,11 @@ import robocode.ScannedRobotEvent;
 
 public class FiniteStateController extends FYPBot{
 
-    
+
     @Override
     protected void ram() {
         sc.setState(State.RAM);
+        setTurnRight(moveDirection*5);
         ahead(10);
         setFire(1);
     }
@@ -22,9 +23,9 @@ public class FiniteStateController extends FYPBot{
 
         //this an implantation of the 'SuperTracker' form the robocode wiki
 
-        if (e.getDistance() >150) {
+        if (e.getDistance() >=150) {
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/40);//amount to turn our gun, lead just a little bit
-            setTurnGunRightRadians(gunTurnAmt); //turn our gun
+            setTurnGunRightRadians(gunTurnAmt); //turn gun
             setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));//drive towards the enemies predicted future location
             setAhead((e.getDistance() - 100)*moveDirection);//move forward
             if(e.getDistance()<=10){
@@ -37,7 +38,7 @@ public class FiniteStateController extends FYPBot{
         }
         else{
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);//amount to turn our gun, lead just a little bit
-            setTurnGunRightRadians(gunTurnAmt);//turn our gun
+            setTurnGunRightRadians(gunTurnAmt);//turn gun
             setTurnLeft(-90-e.getBearing()); //turn perpendicular to the enemy
             setAhead((e.getDistance() - 100)*moveDirection);//move forward
             if(e.getDistance()<=10){
