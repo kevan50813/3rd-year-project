@@ -1,5 +1,6 @@
 package FP;
 
+import robocode.HitByBulletEvent;
 import robocode.ScannedRobotEvent;
 
 public class FiniteStateController extends FYPBot{
@@ -52,10 +53,11 @@ public class FiniteStateController extends FYPBot{
     }
 
     @Override
-    protected void defend() {
+    protected void defend(HitByBulletEvent e) {
         sc.setState(State.DEFEND);
-        setBack(100);
-        setFire(0.5);
+        double bearing=e.getBearing();
+        turnRight(-bearing); // not 100% accutate but it will allow my robot to escape
+        setAhead(100 * moveDirection);
     }
 
     @Override
