@@ -35,7 +35,7 @@ public abstract class FYPBot extends AdvancedRobot{
 	}
 
 
-	//functions for each of the states this will control the states behavoiure
+	//functions for each of the states this will control the states behavior
 	protected abstract void ram();
 
 	protected abstract void attack(ScannedRobotEvent e);
@@ -64,7 +64,8 @@ public abstract class FYPBot extends AdvancedRobot{
 	public void onHitByBullet(HitByBulletEvent e) {
 		double energy=getEnergy();
 		double bearing=e.getBearing();
-		if(energy<50){
+		System.out.println("i was hit at  "+ bearing+ " Energy: "+energy);
+		if(energy<40){
 			defend(e);
 		}
 		else{
@@ -76,7 +77,6 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * onHitWall:turn away form the wall then move away form it
 	 */
 	public void onHitWall(HitWallEvent e) {
-			System.out.println("i was hit at  "+ e.getBearing());
 			if(sc.getState()==State.DEFEND){
 				turnRight(90);
 			}
