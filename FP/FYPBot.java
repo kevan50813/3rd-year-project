@@ -18,7 +18,7 @@ public abstract class FYPBot extends AdvancedRobot{
 		// After trying out your robot, try uncommenting the import at the top,
 		// and the next line:
 
-		// when the robot is turning disable the radar and gun truing to prevent an accrucy loss
+		// when the robot is turning disable the radar and gun truing to prevent an accuracy loss
 		setAdjustRadarForRobotTurn(true);
 		setAdjustGunForRobotTurn(true);
 		//setColors
@@ -46,8 +46,8 @@ public abstract class FYPBot extends AdvancedRobot{
 
 
 	/**
-	 * onScannedRobot: if it has the energy it will attmpt to engage else it will flee
-	 * when it engages it will lock on to the opponat 
+	 * onScannedRobot: if it has the energy it will attempt to engage else it will flee
+	 * when it engages it will lock on to the opponent
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energy=getEnergy();
@@ -61,7 +61,7 @@ public abstract class FYPBot extends AdvancedRobot{
 
 
 	/**
-	 * onHitByBullet: if it has the energy it will turn to face off agist its enmy else it will flee
+	 * onHitByBullet: if it has the energy it will turn to face off against its enemy's else it will flee
 	 */
 	public void onHitByBullet(HitByBulletEvent e) {
 		double energy=getEnergy();
@@ -83,7 +83,7 @@ public abstract class FYPBot extends AdvancedRobot{
 	}	
 	
 	/**
-	 * OnWin: do a vicoty dance
+	 * OnWin: do a victory dance
 	 */
 	 public void onWin(WinEvent e){
 		turnRight(180);

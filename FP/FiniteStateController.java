@@ -53,8 +53,6 @@ public class FiniteStateController extends FYPBot{
             setTurnLeft(-90-bearing);// not 100% accurate but it will allow my robot to escape
             setBack(100 * moveDirection);
         }
-
-
     }
 
     //move arround while conrlty scannign the area
