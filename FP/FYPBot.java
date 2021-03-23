@@ -51,7 +51,6 @@ public abstract class FYPBot extends AdvancedRobot{
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energy=getEnergy();
-
 	    if(energy>=20){
 			attack(e);
 		}
