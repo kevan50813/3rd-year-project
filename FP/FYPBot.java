@@ -54,6 +54,9 @@ public abstract class FYPBot extends AdvancedRobot{
 	    if(energy>=20){
 			attack(e);
 		}
+	    else{
+			setAhead(100 * moveDirection);
+		}
 	}
 
 
