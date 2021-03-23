@@ -67,12 +67,7 @@ public abstract class FYPBot extends AdvancedRobot{
 		double energy=getEnergy();
 		double bearing=e.getBearing();
 		System.out.println("i was hit at  "+ bearing+ " Energy: "+energy);
-		if(energy<40){
-			defend(e);
-		}
-		else{
-			turnGunRight(bearing);
-		}
+		defend(e);
 	}
 	
 	/**

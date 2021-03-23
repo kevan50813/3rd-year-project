@@ -20,20 +20,13 @@ public class FiniteStateController extends FYPBot{
         double absBearing=e.getBearingRadians()+getHeadingRadians();
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
-
         //this an implantation of the 'SuperTracker' form the robocode wiki
-        if (e.getDistance() >=150) {
+        if (e.getDistance() >150) {
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/40);//amount to turn our gun, lead just a little bit
             setTurnGunRightRadians(gunTurnAmt); //turn gun
             setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
-            if(e.getDistance()<=10){
-                ram();
-            }
-            else{
-                setAhead((e.getDistance() - 100)*moveDirection);//move forward
-                setFire(1.5);//fire
-            }
-
+            setAhead((e.getDistance() - 100)*moveDirection);//move forward
+            setFire(1.5);
         }
         else{
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);//amount to turn our gun, lead just a little bit
@@ -54,9 +47,16 @@ public class FiniteStateController extends FYPBot{
     @Override
     protected void defend(HitByBulletEvent e) {
         sc.setState(State.DEFEND);
+        double energy=getEnergy();
         double bearing=e.getBearing();
-        turnRight(-bearing); // not 100% accurate but it will allow my robot to escape
-        setAhead(100 * moveDirection);
+        if(energy<40){
+            setTurnLeft(-90-bearing);// not 100% accurate but it will allow my robot to escape
+            setBack(100 * moveDirection);
+        }
+        else{
+            turnGunRight(bearing);
+        }
+
     }
 
     //move arround while conrlty scannign the area
