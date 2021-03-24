@@ -70,8 +70,8 @@ public class Rocket extends FYPBot{
             turnRight(45);
             ahead(100 *moveDirection);
             turnRight(-45);
-            isScanned=false;
         }
+        isScanned=false;
 
     }
 
