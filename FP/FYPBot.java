@@ -79,7 +79,7 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * onHitWall:turn away form the wall then move away form it
 	 */
 	public void onHitWall(HitWallEvent e) {
-				moveDirection= -moveDirection;
+				moveDirection= moveDirection * -1;
 				setTurnLeft(45);
 				setAhead(100*moveDirection);
 	}	
@@ -88,9 +88,11 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * OnWin: do a victory dance
 	 */
 	 public void onWin(WinEvent e){
+	 	System.out.println("i won this round");
 		turnRight(180);
 		turnRight(-180);
 		turnRight(360);
+
 	 }
 
 }
