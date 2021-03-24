@@ -3,7 +3,7 @@ package FP;
 import robocode.HitByBulletEvent;
 import robocode.ScannedRobotEvent;
 
-public class FiniteStateController extends FYPBot{
+public class Rocket extends FYPBot{
 
     // to ram , turn to face the enmay and then drive fared at full force
     @Override
@@ -22,14 +22,16 @@ public class FiniteStateController extends FYPBot{
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
         //this an implantation of the 'SuperTracker' form the robocode wiki
         if (e.getDistance() >120) {
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/40);//amount to turn our gun, lead just a little bit
+            // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/40);
             setTurnGunRightRadians(gunTurnAmt); //turn gun
             setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
             setAhead((e.getDistance() - 100)*moveDirection);//move forward
             setFire(1.5);
         }
         else{
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);//amount to turn our gun, lead just a little bit
+            //turn at less of an agle baascue the oppontant is claoser `
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
             setTurnGunRightRadians(gunTurnAmt);//turn gun
             if(e.getDistance()<=20){
                 ram(e);
@@ -62,11 +64,15 @@ public class FiniteStateController extends FYPBot{
     @Override
     protected void search() {
         sc.setState(State.SEARCH);
-        setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
-        ahead(100 *moveDirection);
-        turnRight(45);
-        ahead(100 *moveDirection);
-        turnRight(-45);
+        if(!isScanned){
+            setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
+            ahead(100 *moveDirection);
+            turnRight(45);
+            ahead(100 *moveDirection);
+            turnRight(-45);
+            isScanned=false;
+        }
+
     }
 
 }

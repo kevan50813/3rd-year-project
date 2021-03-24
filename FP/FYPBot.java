@@ -11,6 +11,7 @@ public abstract class FYPBot extends AdvancedRobot{
 	// Initialization of the robot should be put here
 	sateController sc =new sateController();
 	protected int moveDirection=1;
+	protected boolean isScanned=false;
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -35,7 +36,7 @@ public abstract class FYPBot extends AdvancedRobot{
 	}
 
 
-	//functions for each of the states this will control the states behavior
+	//functions for each of the states this will control the states behavior, having them as abstrct classes means that myu code is polymprphic due to baing able to use the same code acorss mutiple bots
 	protected abstract void ram(ScannedRobotEvent e);
 
 	protected abstract void attack(ScannedRobotEvent e);
@@ -51,6 +52,10 @@ public abstract class FYPBot extends AdvancedRobot{
 	 */
 	public void onScannedRobot(ScannedRobotEvent e) {
 		double energy=getEnergy();
+		if(!isScanned){
+			isScanned=true;
+			System.out.println("i have locacted "+ e.getName());
+		}
 	    if(energy>=20){
 			attack(e);
 		}
