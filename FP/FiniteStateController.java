@@ -7,9 +7,9 @@ public class FiniteStateController extends FYPBot{
 
     // to ram , turn to face the enmay and then drive fared at full force
     @Override
-    protected void ram() {
+    protected void ram(ScannedRobotEvent e) {
         sc.setState(State.RAM);
-        ahead(10*moveDirection);
+        ahead(e.getDistance()+10 *moveDirection);
         setFire(1);
     }
 
@@ -31,8 +31,8 @@ public class FiniteStateController extends FYPBot{
         else{
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);//amount to turn our gun, lead just a little bit
             setTurnGunRightRadians(gunTurnAmt);//turn gun
-            if(e.getDistance()<=10){
-                ram();
+            if(e.getDistance()<=20){
+                ram(e);
             }
             else{
                 setTurnLeft(-90-e.getBearing());

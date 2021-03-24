@@ -36,7 +36,7 @@ public abstract class FYPBot extends AdvancedRobot{
 
 
 	//functions for each of the states this will control the states behavior
-	protected abstract void ram();
+	protected abstract void ram(ScannedRobotEvent e);
 
 	protected abstract void attack(ScannedRobotEvent e);
 
