@@ -21,7 +21,7 @@ public class FiniteStateController extends FYPBot{
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
         //this an implantation of the 'SuperTracker' form the robocode wiki
-        if (e.getDistance() >150) {
+        if (e.getDistance() >120) {
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/40);//amount to turn our gun, lead just a little bit
             setTurnGunRightRadians(gunTurnAmt); //turn gun
             setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
