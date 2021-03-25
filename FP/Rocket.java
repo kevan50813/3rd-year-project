@@ -9,6 +9,7 @@ public class Rocket extends FYPBot{
     @Override
     protected void ram(ScannedRobotEvent e) {
         sc.setState(State.RAM);
+        System.out.println(sc.getState());
         ahead(e.getDistance()+10 *moveDirection);
         setFire(1);
     }
@@ -16,6 +17,11 @@ public class Rocket extends FYPBot{
     @Override
     protected void attack(ScannedRobotEvent e) {
         sc.setState(State.ATTACK);
+        if(!printed){
+            System.out.println(sc.getState());
+            printed=true;
+        }
+
         double gunTurnAmt;
         double absBearing=e.getBearingRadians()+getHeadingRadians();
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
@@ -33,7 +39,7 @@ public class Rocket extends FYPBot{
             //turn at less of an agle baascue the oppontant is claoser `
             gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
             setTurnGunRightRadians(gunTurnAmt);//turn gun
-            if(e.getDistance()<=20){
+            if(e.getDistance()<=40){
                 ram(e);
             }
             else{
@@ -49,6 +55,7 @@ public class Rocket extends FYPBot{
     @Override
     protected void defend(HitByBulletEvent e) {
         sc.setState(State.DEFEND);
+        System.out.println(sc.getState());
         double energy=getEnergy();
         double bearing=e.getBearing();
         if(energy<40){
@@ -64,6 +71,7 @@ public class Rocket extends FYPBot{
     @Override
     protected void search() {
         sc.setState(State.SEARCH);
+        System.out.println(sc.getState());
         if(!isScanned){
             setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
             ahead(100 *moveDirection);
