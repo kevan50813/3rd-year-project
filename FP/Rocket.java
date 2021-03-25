@@ -21,6 +21,10 @@ public class Rocket extends FYPBot{
     protected void attack(ScannedRobotEvent e) {
         sc.setState(State.ATTACK);
         int dist=r.nextInt(101);
+        double gunTurnAmt;
+        double absBearing=e.getBearingRadians()+getHeadingRadians();
+        double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
+        setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
         //only print once to prevent the termial form flooding with the workd 'ATTACK'
         if(!printed){
             System.out.println(sc.getState());
@@ -31,10 +35,6 @@ public class Rocket extends FYPBot{
             return;
         }
 
-        double gunTurnAmt;
-        double absBearing=e.getBearingRadians()+getHeadingRadians();
-        double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
-        setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
         //this an implantation of the 'SuperTracker' form the robocode wiki
         if (e.getDistance() >120) {
             // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
