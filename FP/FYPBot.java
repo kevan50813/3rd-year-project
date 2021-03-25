@@ -32,6 +32,10 @@ public abstract class FYPBot extends AdvancedRobot{
 		// Robot main loop
 		while(true) {
 			search();
+			if(sc.getState()==State.DEFEND){
+				setBack(100*moveDirection);
+				turnRight(45);
+			}
 		}
 	}
 
