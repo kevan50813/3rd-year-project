@@ -26,6 +26,10 @@ public class Rocket extends FYPBot{
             printed=true;
         }
 
+        if(e.isSentryRobot()){
+            return;
+        }
+
         double gunTurnAmt;
         double absBearing=e.getBearingRadians()+getHeadingRadians();
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
