@@ -3,8 +3,11 @@ package FP;
 import robocode.HitByBulletEvent;
 import robocode.ScannedRobotEvent;
 
+import java.util.Random;
+
 public class Rocket extends FYPBot{
 
+    Random r=new Random();
     // to ram , turn to face the enmay and then drive fared at full force
     @Override
     protected void ram(ScannedRobotEvent e) {
@@ -17,6 +20,7 @@ public class Rocket extends FYPBot{
     @Override
     protected void attack(ScannedRobotEvent e) {
         sc.setState(State.ATTACK);
+        int dist=r.nextInt(101);
         if(!printed){
             System.out.println(sc.getState());
             printed=true;
@@ -29,22 +33,22 @@ public class Rocket extends FYPBot{
         //this an implantation of the 'SuperTracker' form the robocode wiki
         if (e.getDistance() >120) {
             // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/40);
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/50);
             setTurnGunRightRadians(gunTurnAmt); //turn gun
             setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
-            setAhead((e.getDistance() - 100)*moveDirection);//move forward
+            setAhead((e.getDistance() - dist)*moveDirection);//move forward
             setFire(1.5);
         }
         else{
-            //turn at less of an agle baascue the oppontant is claoser `
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
+            //turn at less of an agle baascue the oppontant is claoser
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);
             setTurnGunRightRadians(gunTurnAmt);//turn gun
             if(e.getDistance()<=40){
                 ram(e);
             }
             else{
                 setTurnLeft(-90-e.getBearing());
-                setAhead((e.getDistance() - 100)*moveDirection);//move forward
+                setAhead((e.getDistance() - dist)*moveDirection);//move forward
                 setFire(3);
             }
         }
