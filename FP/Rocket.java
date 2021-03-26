@@ -11,26 +11,23 @@ public class Rocket extends FYPBot{
     // to ram , turn to face the enmay and then drive fared at full force
     @Override
     protected void ram(ScannedRobotEvent e) {
+        sc.printStateChange(sc.getState(),State.RAM);
         sc.setState(State.RAM);
-        System.out.println(sc.getState());
         ahead(e.getDistance()+10 *moveDirection);
         setFire(1);
     }
 
     @Override
     protected void attack(ScannedRobotEvent e) {
+        sc.printStateChange(sc.getState(),State.ATTACK);
         sc.setState(State.ATTACK);
         int dist=r.nextInt(101);
         double gunTurnAmt;
         double absBearing=e.getBearingRadians()+getHeadingRadians();
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
-        //only print once to prevent the termial form flooding with the workd 'ATTACK'
-        if(!printed){
-            System.out.println(sc.getState());
-            printed=true;
-        }
 
+        //if its a senty robot then ignore it, suince we should be figting senty robots
         if(e.isSentryRobot()){
             return;
         }
@@ -63,8 +60,8 @@ public class Rocket extends FYPBot{
     //find out where the bullet came form, turn and move out of the way
     @Override
     protected void defend(HitByBulletEvent e) {
+        sc.printStateChange(sc.getState(),State.DEFEND);
         sc.setState(State.DEFEND);
-        System.out.println(sc.getState());
         double energy=getEnergy();
         double bearing=e.getBearing();
         if(energy<40){
@@ -81,8 +78,8 @@ public class Rocket extends FYPBot{
     //move arround while conrlty scannign the area
     @Override
     protected void search() {
+        sc.printStateChange(sc.getState(),State.SEARCH);
         sc.setState(State.SEARCH);
-        System.out.println(sc.getState());
         if(!isScanned){
             setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
             ahead(100 *moveDirection);

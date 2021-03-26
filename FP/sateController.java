@@ -13,6 +13,13 @@ public class sateController {
         this.state = state;
     }
 
+    public void printStateChange(State lastState, State newState){
+        if(lastState==newState || lastState==null){
+            return;
+        }
+        System.out.println("Changed to Sate "+newState);
+    }
+
 
 
 }

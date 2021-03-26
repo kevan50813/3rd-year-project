@@ -12,7 +12,6 @@ public abstract class FYPBot extends AdvancedRobot{
 	sateController sc =new sateController();
 	protected int moveDirection=1;
 	protected boolean isScanned=false;
-	protected boolean printed=false;//for testing purposaes to makes sure all states are accesble
 	/**
 	 * run: FYPBot's default behavior.
 	 */
@@ -61,12 +60,11 @@ public abstract class FYPBot extends AdvancedRobot{
 			isScanned=true;
 			System.out.println("i have locacted "+ e.getName());
 		}
-	    if(energy>=20){
-			attack(e);
+		attack(e);
+		if(energy<20){
+			setBack(100*moveDirection);
 		}
-	    else{
-			setBack(100 * moveDirection);
-		}
+
 	}
 
 
