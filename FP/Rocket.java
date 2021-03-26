@@ -73,6 +73,8 @@ public class Rocket extends FYPBot{
         }
         else{
             setTurnLeft(bearing);
+            setAhead(100 * moveDirection);
+
         }
     }
 
