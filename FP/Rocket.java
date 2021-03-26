@@ -60,7 +60,7 @@ public class Rocket extends FYPBot{
 
     }
 
-    //in the end state , it will : find out where the bullet came form, turn and move out of the way
+    //find out where the bullet came form, turn and move out of the way
     @Override
     protected void defend(HitByBulletEvent e) {
         sc.setState(State.DEFEND);

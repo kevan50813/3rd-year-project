@@ -65,7 +65,7 @@ public abstract class FYPBot extends AdvancedRobot{
 			attack(e);
 		}
 	    else{
-			setAhead(100 * moveDirection);
+			setBack(100 * moveDirection);
 		}
 	}
 
