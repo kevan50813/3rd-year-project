@@ -19,12 +19,11 @@ public class Rocket extends FYPBot{
 
     @Override
     protected void attack(ScannedRobotEvent e) {
-        sc.printStateChange(sc.getState(),State.ATTACK);
-        sc.setState(State.ATTACK);
         int dist=r.nextInt(101);
         double gunTurnAmt;
         double absBearing=e.getBearingRadians()+getHeadingRadians();
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
+
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
 
         //if its a senty robot then ignore it, suince we should be figting senty robots
@@ -32,29 +31,43 @@ public class Rocket extends FYPBot{
             return;
         }
 
-        //this an implantation of the 'SuperTracker' form the robocode wiki
-        if (e.getDistance() >120) {
-            // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/25);
-            setTurnGunRightRadians(gunTurnAmt); //turn gun
-            setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
-            setAhead((e.getDistance() - dist)*moveDirection);//move forward
-            setFire(1.5);
+        if(getEnergy()<20){
+            sc.printStateChange(sc.getState(),State.DEFEND);
+            sc.setState(State.DEFEND);
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);
+            setTurnGunRightRadians(gunTurnAmt);
+            setTurnLeft(-90-e.getBearing());
+            setBack(dist*moveDirection);
+            setFire(3);
         }
         else{
-            //turn at less of an agle baascue the oppontant is claoser
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);
-            setTurnGunRightRadians(gunTurnAmt);//turn gun
-            if(e.getDistance()<=40){
-                ram(e);
+            sc.printStateChange(sc.getState(),State.ATTACK);
+            sc.setState(State.ATTACK);
+
+
+            //this an implantation of the 'SuperTracker' form the robocode wiki
+            if (e.getDistance() >120) {
+                // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
+                gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/17);
+                setTurnGunRightRadians(gunTurnAmt); //turn gun
+                setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
+                setAhead((e.getDistance() - dist)*moveDirection);//move forward
+                setFire(1.5);
             }
             else{
-                setTurnLeft(-90-e.getBearing());
-                setAhead((e.getDistance() - dist)*moveDirection);//move forward
-                setFire(3);
+                //turn at less of an agle baascue the oppontant is claoser
+                gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);
+                setTurnGunRightRadians(gunTurnAmt);//turn gun
+                if(e.getDistance()<=40){
+                    ram(e);
+                }
+                else{
+                    setTurnLeft(-90-e.getBearing());
+                    setAhead((e.getDistance() - dist)*moveDirection);//move forward
+                    setFire(3);
+                }
             }
         }
-
     }
 
     //find out where the bullet came form, turn and move out of the way
