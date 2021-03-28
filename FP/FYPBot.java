@@ -82,6 +82,7 @@ public abstract class FYPBot extends AdvancedRobot{
 	 * onHitWall:turn away form the wall then move away form it
 	 */
 	public void onHitWall(HitWallEvent e) {
+				System.out.println("i was hit a Wall chaing move direction form: "+ moveDirection+ " to "+ -moveDirection);
 				moveDirection= moveDirection * -1;
 				setTurnLeft(45);
 				setAhead(100*moveDirection);

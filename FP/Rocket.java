@@ -23,7 +23,6 @@ public class Rocket extends FYPBot{
         double gunTurnAmt;
         double absBearing=e.getBearingRadians()+getHeadingRadians();
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
-
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
 
         //if its a senty robot then ignore it, suince we should be figting senty robots
