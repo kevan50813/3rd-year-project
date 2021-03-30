@@ -42,12 +42,10 @@ public class Rocket extends FYPBot{
         else{
             sc.printStateChange(sc.getState(),State.ATTACK);
             sc.setState(State.ATTACK);
-
-
             //this an implantation of the 'SuperTracker' form the robocode wiki
             if (e.getDistance() >120) {
                 // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
-                gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/17);
+                gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
                 setTurnGunRightRadians(gunTurnAmt); //turn gun
                 setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
                 setAhead((e.getDistance() - dist)*moveDirection);//move forward
