@@ -33,7 +33,7 @@ public class Rocket extends FYPBot{
         if(getEnergy()<20){
             sc.printStateChange(sc.getState(),State.DEFEND);
             sc.setState(State.DEFEND);
-            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);
+            gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
             setTurnGunRightRadians(gunTurnAmt);
             setTurnLeft(-90-e.getBearing());
             setBack(dist*moveDirection);
