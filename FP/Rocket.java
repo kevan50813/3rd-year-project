@@ -25,7 +25,7 @@ public class Rocket extends FYPBot{
         double  velocity=e.getVelocity() * Math.sin(e.getHeadingRadians() -absBearing);
         setTurnRadarLeftRadians(getRadarTurnRemainingRadians());
 
-        //if its a senty robot then ignore it, suince we should be figting senty robots
+        //if its a senty robot then ignore it, since we should be figting senty robots
         if(e.isSentryRobot()){
             return;
         }
@@ -44,7 +44,7 @@ public class Rocket extends FYPBot{
             sc.setState(State.ATTACK);
             //this an implantation of the 'SuperTracker' form the robocode wiki
             if (e.getDistance() >120) {
-                // roate the gun such that it will get where the oppont was last and assueme it will continuw in the same direction
+                // roate the gun such that it will get where the oppont was last and assueme it will continue in the same direction
                 gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/20);
                 setTurnGunRightRadians(gunTurnAmt); //turn gun
                 setTurnRightRadians(robocode.util.Utils.normalRelativeAngle(absBearing-getHeadingRadians()+velocity/getVelocity()));
@@ -52,7 +52,7 @@ public class Rocket extends FYPBot{
                 setFire(1.5);
             }
             else{
-                //turn at less of an agle baascue the oppontant is claoser
+                //turn at less of an angle because the oppontant is closer
                 gunTurnAmt = robocode.util.Utils.normalRelativeAngle(absBearing- getGunHeadingRadians()+velocity/10);
                 setTurnGunRightRadians(gunTurnAmt);//turn gun
                 if(e.getDistance()<=40){
@@ -79,7 +79,7 @@ public class Rocket extends FYPBot{
             setBack(100 * moveDirection);
         }
         else{
-            setTurnLeft(bearing);
+            setTurnLeft(-45-bearing);
             setAhead(100 * moveDirection);
 
         }
