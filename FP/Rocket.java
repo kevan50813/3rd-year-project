@@ -74,20 +74,21 @@ public class Rocket extends FYPBot {
         sc.setState(State.DEFEND);
         double energy=getEnergy();
         double bearing=e.getBearing();
-        setTurnRight(bearing + 90);
-        // strafe by changing direction every 10 ticks
-        if (getTime() % 15 == 0) {
-            turnDirection();
-            setAhead(100 * moveDirection);
-        }
         if(energy<40){
             setTurnLeft(-90-bearing);// not 100% accurate but it will allow my robot to escape
             setBack(100 * moveDirection);
         }
         else{
-            setTurnLeft(-45-bearing);
-            setAhead(100 * moveDirection);
-
+            setTurnRight(bearing + 90);
+            // strafe by changing direction every 15 ticks
+            if (getTime() % 15 == 0) {
+                turnDirection();
+                setAhead(150 * moveDirection);
+            }
+            else{
+                setTurnLeft(-45-bearing);
+                setAhead(100 * moveDirection);
+            }
         }
 
     }
