@@ -5,7 +5,7 @@ import robocode.ScannedRobotEvent;
 
 import java.util.Random;
 
-public class Rocket extends FYPBot{
+public class Rocket extends FYPBot {
 
     Random r=new Random();
     // to ram , turn to face the enmay and then drive fared at full force
@@ -74,6 +74,12 @@ public class Rocket extends FYPBot{
         sc.setState(State.DEFEND);
         double energy=getEnergy();
         double bearing=e.getBearing();
+        setTurnRight(bearing + 90);
+        // strafe by changing direction every 10 ticks
+        if (getTime() % 15 == 0) {
+            turnDirection();
+            setAhead(100 * moveDirection);
+        }
         if(energy<40){
             setTurnLeft(-90-bearing);// not 100% accurate but it will allow my robot to escape
             setBack(100 * moveDirection);
@@ -83,6 +89,7 @@ public class Rocket extends FYPBot{
             setAhead(100 * moveDirection);
 
         }
+
     }
 
     //move arround while conrlty scannign the area
